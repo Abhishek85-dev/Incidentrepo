@@ -6,7 +6,11 @@ import {
   faGithub,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import "./LoginSignUp.css";
+import Home from "../Home/home";
+
 
 const LoginSignUp = () => {
   const [isActive, setIsActive] = useState(false);
@@ -25,7 +29,7 @@ const LoginSignUp = () => {
 
   const handleProfileSelect = (profile) => {
     setSelectedProfile(profile);
-    setIsOpen(false); 
+    setIsOpen(false);
   };
 
   const handleClickOutside = (event) => {
@@ -41,15 +45,90 @@ const LoginSignUp = () => {
     };
   }, []);
 
+  // -----------------------------------------------------------------------
+  const [name, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [profile, setProfile] = useState("");
+    async function save(event) {
+        event.preventDefault();
+        try {
+          await axios.post("http://localhost:8080/api/v1/userregistration/save", {
+          name: name,
+          email_id: email,
+          password: password,
+          profile:"profile"
+          });
+          alert("User Registation Successfully");
+        } catch (err) {
+          alert(err);
+        }
+      }
+
+      const [emailLogin, setLoginEmail] = useState("");
+    const [passwordLogin, setLoginPassword] = useState("");
+    const navigate = useNavigate();
+    async function login(event) {
+        event.preventDefault();
+        try {
+          await axios.post("http://localhost:8080/api/v1/login/logging", {
+            email: email,
+            password: password,
+            }).then((res) => 
+            {
+             console.log(res.data);
+             
+             if (res.data.message == "Email not exits") 
+             {
+               alert("Email not exits");
+             } 
+             else if(res.data.message == "Login Success")
+             { 
+                
+                navigate('/home');
+             } 
+              else 
+             { 
+                alert("Incorrect Email and Password not match");
+             }
+          }, fail => {
+           console.error(fail); // Error!
+  });
+        }
+        catch (err) {
+          alert(err);
+        }
+      
+      }
+
   return (
     <div className={`container ${isActive ? "active" : ""}`} id="container">
+      {/* ----------------------------------------------------------------------------- */}
       <div className="form-container sign-up">
         <form>
           <h1>Create Account</h1>
           <span>use your email for registration</span>
-          <input type="text" placeholder="Name" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
+          <input type="text" placeholder="Name" 
+            value={name}
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
+          />
+          <input type="email" placeholder="Email" 
+          
+           
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}
+          />
+          <input type="password" placeholder="Password" 
+          
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value);
+          }}
+          />
 
           <div className="dropdown-container" ref={dropdownRef}>
             <div
@@ -61,7 +140,6 @@ const LoginSignUp = () => {
                 {selectedProfile || "Select Profile"}
               </div>
               <div className={`arrow ${isOpen ? "open" : ""}`}>&#9662;</div>{" "}
-              {/* Arrow element */}
               <div className="dropdown">
                 <div
                   className="dropdown-option"
@@ -96,9 +174,12 @@ const LoginSignUp = () => {
               </div>
             </div>
           </div>
-          <button type="button">Sign Up</button>
+          <button type="button" onClick={save}>Sign Up</button>
         </form>
       </div>
+
+      {/* --------------------------------------------------------------------------------- */}
+
       <div className="form-container sign-in">
         <form>
           <h1>Sign In</h1>
@@ -109,7 +190,7 @@ const LoginSignUp = () => {
             <a href="#" className="icon2">
               <FontAwesomeIcon icon={faFacebookF} />
             </a>
-            <a href="#" className="icon3">
+            <a href="/oauth2/authorization/github" className="icon3">
               <FontAwesomeIcon icon={faGithub} />
             </a>
             <a href="#" className="icon4">
@@ -117,14 +198,24 @@ const LoginSignUp = () => {
             </a>
           </div>
           <span>or use your email for login</span>
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
+          <input type="email" placeholder="Email"   value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}/>
+          <input type="password" placeholder="Password"  
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}/>
           <a href="#" className="Forgot-password">
             Forgot Your Password?
           </a>
-          <button type="button">Sign In</button>
+          <button type="button" onClick={login}>Sign In</button>
         </form>
       </div>
+
+      {/* --------------------------------------------------------------------------- */}
+
       <div className="toggle-container">
         <div className="toggle">
           <div className="toggle-panel toggle-left">
@@ -143,6 +234,8 @@ const LoginSignUp = () => {
           </div>
         </div>
       </div>
+
+      {/* ---------------------------------------------------------------------------------------- */}
     </div>
   );
 };
