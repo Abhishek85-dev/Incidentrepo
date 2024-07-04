@@ -1,0 +1,14 @@
+.profileForm{
+
+margin-top: 50px;
+align-content: center;
+max-width: 1000px;
+margin-left: 200px;
+padding: 9px;
+background: linear-gradient(45deg, rgb(33, 32, 32), transparent);
+border-radius: 9px;
+border: thick;
+color: white;
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+
+}

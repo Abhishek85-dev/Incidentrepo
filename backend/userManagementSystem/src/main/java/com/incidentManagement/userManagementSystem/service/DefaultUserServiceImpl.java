@@ -48,9 +48,9 @@ public class DefaultUserServiceImpl implements DefaultUserService{
 		//Roles role = roleRepo.findByRole("USER");
 		
 		User user = new User(
-				userRegisteredDTO.getId(),
+				userRegisteredDTO.getUserId(),
 				userRegisteredDTO.getName(),
-		userRegisteredDTO.getEmail_id(),
+		userRegisteredDTO.getEmail(),
 		
 		passwordEncoder.encode(userRegisteredDTO.getPassword()),
 		userRegisteredDTO.getProfile()
@@ -75,6 +75,7 @@ public class DefaultUserServiceImpl implements DefaultUserService{
 	        User user1 = userRepo.findByEmail(loginDTO.getEmail());
 	        if (user1 != null) {
 	            String password = loginDTO.getPassword();
+                    
 	            String encodedPassword = user1.getPassword();
 	            Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
 	            if (isPwdRight) {

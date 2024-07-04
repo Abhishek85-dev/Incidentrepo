@@ -53,7 +53,9 @@ public class SpringSecurityConfig {
                     requests.requestMatchers("api/v1/userregistration/**", "/api/v1/login/**").permitAll();
                     requests.anyRequest().authenticated();})
                 .formLogin(login -> login.loginPage("/api/v1/login").successHandler(successHandler)).csrf(csrf -> csrf.disable())
-                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/api/v1/login")).oauth2Login(login -> login.loginPage("/api/v1/login").successHandler(successHandler));
+                .logout(logout -> logout.logoutUrl("/logout")
+                        .logoutSuccessUrl("/api/v1/login"))
+                .oauth2Login(login -> login.loginPage("/api/v1/login").successHandler(successHandler));
 //
 //        http.csrf(AbstractHttpConfigurer::disable);
 //        // oauth configurations

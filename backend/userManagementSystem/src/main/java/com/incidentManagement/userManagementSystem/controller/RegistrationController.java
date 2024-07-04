@@ -55,12 +55,14 @@ public class RegistrationController {
 
     @PostMapping(path = "/save")
     public ResponseEntity<Object> saveEmployee(@RequestBody UserRegisteredDTO userRegisterDTO) {
-       
+      
+//        if (userRegisterDTO.getUserId() == 0) {
+//            return ResponseEntity.badRequest().body("ID is required and cannot be zero.");
+//        }
         if (userRegisterDTO.getName() == null || userRegisterDTO.getName().isEmpty()) {
             return ResponseEntity.badRequest().body("Name is required and cannot be null or empty.");
         }
-        if (userRegisterDTO.getEmail_id() == null || userRegisterDTO.getEmail_id().isEmpty()) {
-              
+        if (userRegisterDTO.getEmail() == null || userRegisterDTO.getEmail().isEmpty()) {
             return ResponseEntity.badRequest().body("Email ID is required and cannot be null or empty.");
         }
         if (userRegisterDTO.getPassword() == null || userRegisterDTO.getPassword().isEmpty()) {
@@ -69,7 +71,6 @@ public class RegistrationController {
         if (userRegisterDTO.getProfile() == null || userRegisterDTO.getProfile().isEmpty()) {
             return ResponseEntity.badRequest().body("Profile is required and cannot be null or empty.");
         }
-        
         String id = userService.save(userRegisterDTO);
         if (id != null) {
             return generateOutput("Your Profile is saved now!", HttpStatus.OK, id);

@@ -55,7 +55,7 @@ const LoginSignUp = () => {
         try {
           await axios.post("http://localhost:8080/api/v1/userregistration/save", {
           name: name,
-          email_id: email,
+          email: email,
           password: password,
           profile:"profile"
           });
